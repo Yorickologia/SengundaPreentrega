@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +45,27 @@ public class VentaControllers {
     public ResponseEntity<Ventas> agregarVenta(@RequestBody Ventas venta) {
         ventasService.agregarVenta(venta);
         return new ResponseEntity<>(venta, HttpStatus.CREATED);
+    }
+    @PutMapping(value = "/{nroDeTicket}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Ventas> actualizarVenta(@PathVariable("nroDeTicket") Integer nroDeTicket, @RequestBody Ventas venta) {
+        Ventas ventaExistente = ventasService.mostrarVentaPorNroDeTicket(nroDeTicket);
+        if (ventaExistente != null) {
+            venta.setNroDeTicket(nroDeTicket); // Asegúrate de que el número de ticket sea el correcto
+            Ventas ventaActualizada = ventasService.actualizarVenta(venta);
+            return new ResponseEntity<>(ventaActualizada, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(value = "/{nroDeTicket}")
+    public ResponseEntity<Void> eliminarVenta(@PathVariable("nroDeTicket") Integer nroDeTicket) {
+        Ventas venta = ventasService.mostrarVentaPorNroDeTicket(nroDeTicket);
+        if (venta != null) {
+            ventasService.eliminarVenta(nroDeTicket);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

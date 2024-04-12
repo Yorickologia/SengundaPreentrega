@@ -73,4 +73,25 @@ public class ProductoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable("id") Integer id, @RequestBody Producto producto) {
+        Producto productoExistente = productoService.mostrarProductoPorId(id);
+        if (productoExistente != null) {
+            productoExistente.setNombre(producto.getNombre());
+            productoExistente.setPrecio(producto.getPrecio());
+            return new ResponseEntity<>(productoService.actualizarProducto(productoExistente), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable("id") Integer id) {
+        Producto producto = productoService.mostrarProductoPorId(id);
+        if (producto != null) {
+            productoService.eliminarProducto(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

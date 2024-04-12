@@ -1,12 +1,11 @@
 package com.coderhouse.Services;
 
-import java.util.List;
-
+import com.coderhouse.Repository.VentasRepository;
+import com.coderhouse.modelos.Ventas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.Repository.VentasRepository;
-import com.coderhouse.modelos.Ventas;
+import java.util.List;
 
 @Service
 public class VentasService {
@@ -24,5 +23,13 @@ public class VentasService {
 
     public Ventas agregarVenta(Ventas venta) {
         return ventasRepository.save(venta);
+    }
+
+    public Ventas actualizarVenta(Ventas venta) {
+        return ventasRepository.save(venta);
+    }
+
+    public void eliminarVenta(Integer nroDeTicket) {
+        ventasRepository.deleteById(nroDeTicket);
     }
 }
